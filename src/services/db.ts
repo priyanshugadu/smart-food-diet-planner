@@ -491,12 +491,11 @@ class DatabaseService {
     const idLower = cleanId.toLowerCase();
 
     // Check if user is logging into Admin account
+    // Only the configured admin identity may ever receive the admin role.
+    // Do not grant admin based on generic names/emails or Supabase email text.
     const isAdminAccount =
       idLower === adminCreds.username.toLowerCase() ||
-      idLower === adminCreds.email.toLowerCase() ||
-      idLower === 'admin' ||
-      idLower === 'admin@smartdiet.com' ||
-      idLower === 'admin@smartdiet.edu';
+      idLower === adminCreds.email.toLowerCase();
 
     if (isAdminAccount) {
       if (cleanPass !== adminCreds.password) {
@@ -523,7 +522,9 @@ class DatabaseService {
         id: data.user.id,
         email: data.user.email || email,
         full_name: data.user.user_metadata?.full_name || email.split('@')[0],
-        role: email.toLowerCase().includes('admin') ? 'admin' : 'user',
+        // Supabase users are normal users by default. Admin access is
+        // granted only by the dedicated admin credential check above.
+        role: 'user',
         isGuest: false,
       };
       this.saveAuthUser(authUser);
