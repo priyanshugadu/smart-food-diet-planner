@@ -26,9 +26,9 @@ const STORAGE_KEYS = {
 };
 
 export const DEFAULT_ADMIN_CREDENTIALS: AdminCredentials = {
-  username: 'admin',
-  email: 'admin@smartdiet.com',
-  password: 'admin123',
+  username: 'foodadmin',
+  email: 'foodadmin@smartdiet.com',
+  password: 'SFDP@2026#Admin',
   fullName: 'Faculty Project Admin',
 };
 
@@ -501,7 +501,7 @@ class DatabaseService {
     if (isAdminAccount) {
       if (cleanPass !== adminCreds.password) {
         return {
-          error: `Invalid admin password. Default password is "${adminCreds.password}".`,
+          error: 'Invalid admin username or password.',
         };
       }
       const adminUser: AuthUser = {
