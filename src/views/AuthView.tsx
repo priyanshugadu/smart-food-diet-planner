@@ -319,8 +319,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
                 </div>
               </div>
 
-              {
-
               <div className="flex items-center">
                 <input
                   id="remember-me"
@@ -349,7 +347,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
           {/* ADMIN PORTAL LOGIN FORM */}
           {mode === 'admin' && (
             <form onSubmit={handleLogin} className="space-y-4">
-              {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
