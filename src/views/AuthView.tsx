@@ -42,9 +42,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Current admin credentials for display and auto-fill
-  const adminCreds = db.getAdminCredentials();
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -358,6 +355,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   </div>
                   <input
                     autoComplete="off"
+                    name="admin-user-field"
                     id="admin-login-username"
                     type="text"
                     autoCapitalize="none"
@@ -380,7 +378,8 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <Lock className="w-4 h-4 text-indigo-600" />
                   </div>
                   <input
-                    autoComplete="new-password"
+                    autoComplete="off"
+                    name="admin-pass-field"
                     id="admin-login-password"
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -596,21 +595,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
               <span>Enter as Guest (Demo Mode)</span>
             </button>
 
-            <button
-              id="admin-demo-btn"
-              type="button"
-              onClick={handleAdminDemoLogin}
-              disabled={loading}
-              className="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100/90 text-indigo-900 font-semibold rounded-xl text-xs transition-colors flex items-center justify-between border border-indigo-200 shadow-xs"
-            >
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                <span>Login as Admin (Full Control)</span>
-              </div>
-              <span className="font-mono bg-indigo-200/80 text-indigo-900 px-2 py-0.5 rounded text-[10px] font-bold">
-                {adminCreds.username} : {adminCreds.password}
-              </span>
-            </button>
+
           </div>
         </div>
 
