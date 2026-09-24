@@ -667,11 +667,26 @@ class DatabaseService {
 
   // --- FOODS DATABASE ---
   public async getFoods(): Promise<FoodItem[]> {
+    // Never let a remote Supabase request block the entire app startup.
+    // GitHub Pages should still render using the local seed data if Supabase
+    // is slow, unavailable, or blocked by the browser/network.
     if (this.supabase && this.config.enabled) {
-      const { data, error } = await this.supabase.from('smart_foods').select('*');
-      if (!error && data && data.length > 0) return data as FoodItem[];
+      try {
+        const result = await Promise.race([
+          this.supabase.from('smart_foods').select('*'),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+        ]);
+        if (result && !result.error && result.data && result.data.length > 0) {
+          return result.data as FoodItem[];
+        }
+      } catch (error) {
+        console.warn('Supabase food query failed; using local food data.', error);
+      }
     }
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.FOODS) || JSON.stringify(INITIAL_FOODS));
+
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.FOODS) || JSON.stringify(INITIAL_FOODS)
+    );
   }
 
   public async addFood(food: Omit<FoodItem, 'id'> & { id?: string }): Promise<FoodItem> {
