@@ -65,8 +65,8 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
   const [credSuccess, setCredSuccess] = useState<string | null>(null);
 
   // Unlock gate form state (if non-admin tries to view)
-  const [gateIdentifier, setGateIdentifier] = useState('admin');
-  const [gatePassword, setGatePassword] = useState('admin123');
+  const [gateIdentifier, setGateIdentifier] = useState('');
+  const [gatePassword, setGatePassword] = useState('');
   const [gateShowPassword, setGateShowPassword] = useState(false);
   const [gateError, setGateError] = useState<string | null>(null);
   const [gateLoading, setGateLoading] = useState(false);
@@ -177,22 +177,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
     }
   };
 
-  // Instant elevate to admin (1-click direct login)
-  const handleInstantAdminLogin = async () => {
-    setGateLoading(true);
-    setGateError(null);
-    try {
-      const admin = await db.loginAsAdmin();
-      if (onElevateToAdmin) {
-        onElevateToAdmin(admin);
-      }
-    } catch (err: any) {
-      setGateError(err.message || 'Failed to login as admin.');
-    } finally {
-      setGateLoading(false);
-    }
-  };
-
+  // Admin access must always go through the authenticated admin credentials.
   const handleUnlockAdminGate = async (e: React.FormEvent) => {
     e.preventDefault();
     setGateError(null);
@@ -207,20 +192,13 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           onElevateToAdmin(res.user);
         }
       } else {
-        setGateError('This account does not have administrator privileges. Please use the Admin User Naam (default: "admin").');
+        setGateError('This account does not have administrator privileges. Please use the configured administrator credentials.');
       }
     } catch (err: any) {
       setGateError(err.message || 'Failed to authenticate admin credentials.');
     } finally {
       setGateLoading(false);
     }
-  };
-
-  const handleAutoFillGate = () => {
-    const creds = db.getAdminCredentials();
-    setGateIdentifier(creds.username);
-    setGatePassword(creds.password);
-    setGateError(null);
   };
 
   // Food CRUD Handlers
