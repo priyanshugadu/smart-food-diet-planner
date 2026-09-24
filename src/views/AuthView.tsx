@@ -550,23 +550,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
             </form>
           )}
 
-            <button
-              id="admin-demo-btn"
-              type="button"
-              onClick={handleAdminDemoLogin}
-              disabled={loading}
-              className="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100/90 text-indigo-900 font-semibold rounded-xl text-xs transition-colors flex items-center justify-between border border-indigo-200 shadow-xs"
-            >
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                <span>Login as Admin (Full Control)</span>
-              </div>
-              <span className="font-mono bg-indigo-200/80 text-indigo-900 px-2 py-0.5 rounded text-[10px] font-bold">
-                Auto Fill
-              </span>
-            </button>
-
-          {/* Divider */}
+          {/* Divider */
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-200" />
@@ -587,7 +571,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
               disabled={loading}
               className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200/80 text-slate-800 font-semibold rounded-xl text-sm transition-colors flex items-center justify-center gap-2 border border-slate-200"
             >
-              <Sparkles className="w-4 h-4 text-emerald-600" />
+              <UtensilsCrossed className="w-4 h-4 text-emerald-600" />
               <span>Enter as Guest (Demo Mode)</span>
             </button>
 
