@@ -550,7 +550,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
             </form>
           )}
 
-          {/* Divider */
+          {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-200" />
