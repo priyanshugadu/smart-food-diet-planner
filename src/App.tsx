@@ -71,28 +71,48 @@ export default function App() {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
 
-  // Initialize DB and current session
+  // Initialize the UI immediately. Remote Supabase calls must never block
+  // the first screen on GitHub Pages.
   useEffect(() => {
     const initApp = async () => {
       setLoading(true);
-      try {
-        const currentUser = db.getCurrentUser();
-        setIsSupabaseConnected(db.isSupabaseConfigured());
-        const allFoods = await db.getFoods();
-        setFoods(allFoods);
 
-        if (currentUser) {
-          setUser(currentUser);
-          await loadUserData(currentUser.id, selectedDate);
-        }
-      } catch (e) {
-        console.error('App init error:', e);
-      } finally {
+      const currentUser = db.getCurrentUser();
+      setIsSupabaseConnected(db.isSupabaseConfigured());
+
+      // Render the login/dashboard shell immediately instead of waiting for
+      // network/database requests.
+      if (!currentUser) {
         setLoading(false);
+
+        db.getFoods()
+          .then((allFoods) => setFoods(allFoods))
+          .catch((e) => console.error('Food data load failed:', e));
+
+        return;
       }
+
+      setUser(currentUser);
+      setLoading(false);
+
+      // Load remote/local data in the background. A failure here should not
+      // prevent the application UI from rendering.
+      void Promise.allSettled([
+        db.getFoods().then((allFoods) => setFoods(allFoods)),
+        loadUserData(currentUser.id, selectedDate),
+      ]).then((results) => {
+        results.forEach((result) => {
+          if (result.status === 'rejected') {
+            console.error('Background app data load failed:', result.reason);
+          }
+        });
+      });
     };
 
-    initApp();
+    initApp().catch((e) => {
+      console.error('App init error:', e);
+      setLoading(false);
+    });
   }, []);
 
   // Reload logs and plans when selected date changes
