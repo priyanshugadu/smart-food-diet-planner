@@ -43,25 +43,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // Current admin credentials for display and auto-fill
-  const [adminCreds, setAdminCreds] = useState(() => db.getAdminCredentials());
-
-  const handleFillAdmin = () => {
-    const creds = db.getAdminCredentials();
-    setAdminCreds(creds);
-    setEmail(creds.username);
-    setPassword(creds.password);
-    setErrorMsg(null);
-    setSuccessMsg(`Auto-filled Admin credentials (User Naam: ${creds.username})`);
-  };
-
-  const handleSelectAdminTab = () => {
-    const creds = db.getAdminCredentials();
-    setMode('admin');
-    setEmail(creds.username);
-    setPassword(creds.password);
-    setErrorMsg(null);
-    setSuccessMsg(null);
-  };
+  const adminCreds = db.getAdminCredentials();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,7 +205,11 @@ export const AuthView: React.FC<AuthViewProps> = ({
             <button
               id="tab-admin"
               type="button"
-              onClick={handleSelectAdminTab}
+              onClick={() => {
+                setMode('admin');
+                setErrorMsg(null);
+                setSuccessMsg(null);
+              }}
               className={`pb-3 font-bold text-center border-b-2 transition-colors flex items-center justify-center gap-1 ${
                 mode === 'admin'
                   ? 'border-indigo-600 text-indigo-700 bg-indigo-50/50 rounded-t-lg'
@@ -277,6 +263,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <User className="w-4 h-4" />
                   </div>
                   <input
+                    autoComplete="off"
                     id="login-email"
                     type="text"
                     autoCapitalize="none"
@@ -313,6 +300,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
+                    autoComplete="new-password"
                     id="login-password"
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -331,32 +319,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                 </div>
               </div>
 
-              {/* Admin Credentials Quick Auto-Fill Card */}
-              <div className="p-3 bg-gradient-to-r from-indigo-50/90 to-purple-50/90 rounded-xl border border-indigo-200/80">
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="flex items-center gap-1.5 font-bold text-indigo-950 text-xs">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                    <span>Admin Dashboard Credentials</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleFillAdmin}
-                    className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-[11px] shadow-xs transition-colors flex items-center gap-1 shrink-0"
-                  >
-                    <span>Auto-Fill Admin</span>
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="bg-white/90 px-2 py-1.5 rounded-lg border border-indigo-100">
-                    <span className="text-slate-400 block text-[10px] font-semibold uppercase tracking-wider">User Naam</span>
-                    <span className="font-mono font-extrabold text-indigo-900 select-all">{adminCreds.username}</span>
-                  </div>
-                  <div className="bg-white/90 px-2 py-1.5 rounded-lg border border-indigo-100">
-                    <span className="text-slate-400 block text-[10px] font-semibold uppercase tracking-wider">Password</span>
-                    <span className="font-mono font-extrabold text-indigo-900 select-all">{adminCreds.password}</span>
-                  </div>
-                </div>
-              </div>
+              {
 
               <div className="flex items-center">
                 <input
@@ -386,32 +349,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
           {/* ADMIN PORTAL LOGIN FORM */}
           {mode === 'admin' && (
             <form onSubmit={handleLogin} className="space-y-4">
-              {/* Credentials Info & Auto-Fill */}
-              <div className="p-3.5 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-1.5 font-extrabold text-indigo-950 text-xs">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                    <span>Active Admin Credentials</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleFillAdmin}
-                    className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-[11px] shadow-xs transition-colors shrink-0"
-                  >
-                    Auto-Fill
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-white/95 p-2 rounded-xl border border-indigo-100">
-                    <span className="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">User Naam</span>
-                    <span className="font-mono font-extrabold text-indigo-900 select-all">{adminCreds.username}</span>
-                  </div>
-                  <div className="bg-white/95 p-2 rounded-xl border border-indigo-100">
-                    <span className="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Password</span>
-                    <span className="font-mono font-extrabold text-indigo-900 select-all">{adminCreds.password}</span>
-                  </div>
-                </div>
-              </div>
+              {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -422,6 +360,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <ShieldCheck className="w-4 h-4 text-indigo-600" />
                   </div>
                   <input
+                    autoComplete="off"
                     id="admin-login-username"
                     type="text"
                     autoCapitalize="none"
@@ -444,6 +383,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <Lock className="w-4 h-4 text-indigo-600" />
                   </div>
                   <input
+                    autoComplete="new-password"
                     id="admin-login-password"
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -537,6 +477,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
+                    autoComplete="new-password"
                     id="reg-password"
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -564,6 +505,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     <Lock className="w-4 h-4" />
                   </div>
                   <input
+                    autoComplete="new-password"
                     id="reg-confirm-password"
                     type={showPassword ? 'text' : 'password'}
                     required
