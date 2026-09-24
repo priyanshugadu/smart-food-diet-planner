@@ -28,7 +28,7 @@ const STORAGE_KEYS = {
 export const DEFAULT_ADMIN_CREDENTIALS: AdminCredentials = {
   username: 'priyanshugaud',
   email: 'foodadmin@smartdiet.com',
-  password: 'SFDP@2026#Admin',
+  password: '8169745349',
   fullName: 'Faculty Project Admin',
 };
 
