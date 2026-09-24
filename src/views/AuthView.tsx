@@ -3,7 +3,6 @@ import {
   UtensilsCrossed,
   Eye,
   EyeOff,
-  Sparkles,
   Lock,
   Mail,
   User,
@@ -135,16 +134,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
     try {
       const guest = await db.loginAsGuest();
       onLoginSuccess(guest);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAdminDemoLogin = async () => {
-    setLoading(true);
-    try {
-      const admin = await db.loginAsAdmin();
-      onLoginSuccess(admin);
     } finally {
       setLoading(false);
     }
@@ -409,16 +398,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <button
-                type="button"
-                onClick={handleAdminDemoLogin}
-                disabled={loading}
-                className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                <span>1-Click Instant Faculty Admin Bypass</span>
-              </button>
-            </form>
+              </form>
           )}
 
           {/* REGISTER FORM */}
