@@ -566,6 +566,30 @@ class DatabaseService {
           isGuest: false,
         };
         this.saveAuthUser(authUser);
+
+        // Create a fresh profile for every newly registered Supabase user.
+        // Never fall back to the demo/guest profile for a new account.
+        const initialProfile: UserProfile = {
+          id: `prof-${authUser.id}`,
+          user_id: authUser.id,
+          full_name: fullName,
+          age: 0,
+          gender: 'male',
+          height: 0,
+          weight: 0,
+          activity_level: 'moderate',
+          fitness_goal: 'maintain_weight',
+          dietary_preference: 'vegetarian',
+          allergies: [],
+          food_preferences: '',
+          target_calories: 0,
+          target_protein: 0,
+          target_water: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        await this.saveProfile(initialProfile);
+
         return { user: authUser };
       }
     }
@@ -645,11 +669,23 @@ class DatabaseService {
     if (profiles[userId]) {
       return profiles[userId];
     }
-    // Return default fallback
+    // A missing profile must never inherit demo/guest data.
+    // Return a clean profile for a new account.
     return {
       ...DEFAULT_GUEST_PROFILE,
-      user_id: userId,
       id: `prof-${userId}`,
+      user_id: userId,
+      full_name: '',
+      age: 0,
+      height: 0,
+      weight: 0,
+      allergies: [],
+      food_preferences: '',
+      target_calories: 0,
+      target_protein: 0,
+      target_water: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
   }
 
