@@ -155,18 +155,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </button>
             )}
 
-            {onOpenAndroidInstall && (
-              <button
-                id="dash-action-android"
-                onClick={onOpenAndroidInstall}
-                className="px-4 py-2.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-950 text-emerald-200 border border-emerald-400/40 font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer"
-                title="Download & Install App on Android"
-              >
-                <Smartphone className="w-4 h-4 text-emerald-400" />
-                <span>Download on Android</span>
-              </button>
-            )}
-
             <button
               id="dash-action-log-food"
               onClick={() => onNavigate('tracker')}
