@@ -298,7 +298,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
               <button
                 type="button"
                 id="instant-admin-login-btn"
-                onClick={handleInstantAdminLogin}
+                
                 disabled={gateLoading}
                 className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
               >
@@ -324,18 +324,6 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
             <form onSubmit={handleUnlockAdminGate} className="space-y-4">
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold text-slate-700">
-                    Admin User Naam (Username) or Email
-                  </label>
-                  <button
-                    type="button"
-                    onClick={handleAutoFillGate}
-                    className="text-[11px] text-indigo-600 hover:text-indigo-800 font-bold"
-                  >
-                    Auto-Fill Default
-                  </button>
-                </div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                     <ShieldCheck className="w-4 h-4" />
