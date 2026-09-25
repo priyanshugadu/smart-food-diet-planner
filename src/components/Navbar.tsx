@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Plus, BotMessageSquare, Sparkles, Palette, Download, Smartphone, ShieldCheck, CalendarDays, Calendar as CalendarIcon } from 'lucide-react';
+import { Menu, Plus, BotMessageSquare, Sparkles, Palette, Download, ShieldCheck, CalendarDays, Calendar as CalendarIcon } from 'lucide-react';
 import { NavTab } from './Sidebar';
 import { AppTheme } from '../types';
 import appLogo from '../assets/images/smart_diet_logo_1790175111322.jpg';
@@ -13,7 +13,6 @@ interface NavbarProps {
   currentTheme?: AppTheme;
   onOpenThemeModal?: () => void;
   onOpenDownloadReport?: () => void;
-  onOpenAndroidInstall?: () => void;
   userRole?: string;
   selectedDate?: string;
   onOpenCalendarModal?: () => void;
@@ -43,7 +42,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentTheme = 'emerald',
   onOpenThemeModal,
   onOpenDownloadReport,
-  onOpenAndroidInstall,
   userRole,
   selectedDate,
   onOpenCalendarModal,
@@ -98,19 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span className="hidden md:inline">Download</span>
-          </button>
-        )}
-
-        {/* Android App Button */}
-        {onOpenAndroidInstall && (
-          <button
-            id="nav-android-btn"
-            onClick={onOpenAndroidInstall}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 transition-colors shadow-2xs cursor-pointer"
-            title="Download & Install App on Android (PWA / WebAPK)"
-          >
-            <Smartphone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span className="hidden md:inline">Android App</span>
           </button>
         )}
 
