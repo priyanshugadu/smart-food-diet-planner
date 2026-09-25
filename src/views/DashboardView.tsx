@@ -16,7 +16,6 @@ import {
   Heart,
   Download,
   Palette,
-  Smartphone,
 } from 'lucide-react';
 import {
   FoodItem,
@@ -42,7 +41,6 @@ interface DashboardViewProps {
   onQuickAddWater: (amount: number) => void;
   onOpenDownloadReport?: () => void;
   onOpenThemeModal?: () => void;
-  onOpenAndroidInstall?: () => void;
   selectedDate?: string;
   onChangeDate?: (date: string) => void;
   onOpenCalendarModal?: () => void;
@@ -58,7 +56,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onQuickAddWater,
   onOpenDownloadReport,
   onOpenThemeModal,
-  onOpenAndroidInstall,
   selectedDate,
   onChangeDate,
   onOpenCalendarModal,
