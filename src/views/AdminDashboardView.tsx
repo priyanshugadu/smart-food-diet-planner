@@ -19,8 +19,6 @@ import {
   AlertCircle,
   CheckCircle2,
   Save,
-  Sparkles,
-  ArrowRight,
   LogOut,
   LayoutDashboard,
   Filter,
@@ -284,29 +282,6 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           </div>
 
           <div className="p-6 sm:p-8 space-y-5">
-            {/* Quick 1-Click Direct Admin Login Banner */}
-            <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-600" />
-                  <span className="text-xs font-bold text-indigo-950">Instant 1-Click Admin Access</span>
-                </div>
-                <span className="text-[11px] font-mono bg-indigo-200/80 text-indigo-900 px-2 py-0.5 rounded font-bold">
-                  {adminCreds.username} : {adminCreds.password}
-                </span>
-              </div>
-              <button
-                type="button"
-                id="instant-admin-login-btn"
-                
-                disabled={gateLoading}
-                className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>{gateLoading ? 'Authenticating...' : 'One-Click Instant Login as Admin'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
 
             <div className="relative flex items-center justify-center">
               <div className="w-full border-t border-slate-200" />
@@ -324,6 +299,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
             <form onSubmit={handleUnlockAdminGate} className="space-y-4">
               <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Admin User Naam (Username) or Email</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                     <ShieldCheck className="w-4 h-4" />
