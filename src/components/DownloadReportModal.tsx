@@ -353,18 +353,6 @@ export const DownloadReportModal: React.FC<DownloadReportModalProps> = ({
         {/* Modal Footer */}
         <div className="p-4 bg-slate-50 dark:bg-slate-950/70 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2">
-            {onOpenAndroidInstall && (
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenAndroidInstall();
-                }}
-                className="px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Download App on Android</span>
-              </button>
-            )}
             <span className="text-[11px] text-slate-400 hidden sm:inline">
               All files download directly to your device storage.
             </span>
