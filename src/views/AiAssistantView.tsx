@@ -6,8 +6,6 @@ import {
   Info,
   User,
   Trash2,
-  RefreshCw,
-  AlertCircle,
   Lightbulb,
 } from 'lucide-react';
 import { UserProfile } from '../types';
@@ -24,6 +22,89 @@ interface AiAssistantViewProps {
   profile: UserProfile;
 }
 
+const buildOfflineReply = (question: string, profile: UserProfile): string => {
+  const q = question.toLowerCase();
+  const calories = profile.target_calories || 2200;
+  const protein = profile.target_protein || 100;
+  const diet = (profile.dietary_preference || 'balanced').toLowerCase();
+  const allergies = (profile.allergies || []).map((a) => a.toLowerCase());
+  const avoidsPeanuts = allergies.some((a) => a.includes('peanut'));
+  const veg = diet.includes('vegetarian') || diet.includes('vegan');
+
+  if (q.includes('breakfast')) return `### Smart Breakfast Ideas 🥣
+
+• **Paneer/besan chilla + curd**
+• **Vegetable oats + curd/Greek yogurt**
+• **Idli + sambar**
+
+For your saved target of **${calories} kcal/day**, aim for a protein-rich breakfast that fits your overall plan.
+
+*Educational nutrition guidance only; portions and nutrition values are estimates.*`;
+
+  if (q.includes('protein') || q.includes('muscle') || q.includes('high-protein')) {
+    const sources = veg
+      ? 'paneer, tofu, soy chunks, dal, rajma, chole and curd/Greek yogurt'
+      : 'eggs, chicken, fish, paneer, tofu, soy chunks, dal and curd/Greek yogurt';
+    return `### High-Protein Options 💪
+
+Useful protein sources for your diet include **${sources}**.
+
+Your saved target is approximately **${protein}g protein/day**. Spread protein across several meals rather than relying on one meal.
+
+*Educational guidance only; nutrition values are approximate.*`;
+  }
+
+  if (q.includes('snack')) {
+    const options = avoidsPeanuts
+      ? 'roasted makhana, roasted chana, fruit with curd, sprouts chaat, or paneer/tofu'
+      : 'roasted makhana, roasted chana, sprouts chaat, fruit with curd, or a measured nut portion';
+    return `### Healthy Snack Ideas 🍎
+
+Try **${options}** and choose a portion that fits your remaining calories.
+${avoidsPeanuts ? '\\n⚠️ Your profile lists a peanut allergy, so peanuts are not included.' : ''}
+
+*Educational nutrition guidance only.*`;
+  }
+
+  if (q.includes('lunch') || q.includes('dinner') || q.includes('meal')) {
+    return `### Balanced Indian Meal 🍛
+
+• **Protein:** ${veg ? 'dal, paneer, tofu, soy or curd' : 'dal, paneer/tofu, eggs, chicken or fish'}
+• **Carbs:** roti, rice or other whole grains
+• **Vegetables:** make vegetables a major part of the plate
+• **Hydration:** drink water through the day
+
+Keep portions aligned with your **${calories} kcal/day** and **${protein}g protein/day** targets.`;
+  }
+
+  if (q.includes('calorie') || q.includes('kcal')) {
+    return `### Calorie Planning 🔢
+
+Your saved daily target is **${calories} kcal**.
+
+A flexible example:
+• Breakfast: 20–25%
+• Lunch: 25–30%
+• Dinner: 25–30%
+• Snacks: 15–25%
+
+These are planning ranges, not strict medical rules.`;
+  }
+
+  return `### Smart Nutrition Assistant 💡
+
+I can help with:
+• Indian meal ideas
+• Protein and calorie planning
+• Healthy snacks and food swaps
+• Vegetarian/vegan options
+• Meal timing and portion ideas
+
+Your saved targets are **${calories} kcal/day** and **${protein}g protein/day**.
+
+Try asking: “suggest a high-protein breakfast”.`;
+};
+
 const PROMPT_CHIPS = [
   'Suggest a high-protein breakfast',
   'Give me a vegetarian lunch under my calorie target',
@@ -37,7 +118,7 @@ export const AiAssistantView: React.FC<AiAssistantViewProps> = ({ profile }) => 
     {
       id: 'welcome',
       sender: 'assistant',
-      text: `Hello ${profile.full_name || 'there'}! I am your Smart Diet Assistant. I've calibrated my suggestions for your goal (${profile.fitness_goal.replace('_', ' ')}), daily target (${profile.target_calories || 2200} kcal), and dietary preference (${profile.dietary_preference}). How can I assist your nutrition plan today?`,
+      text: `Hello ${profile.full_name || 'there'}! I am your Smart Diet Assistant. I can help with meal ideas, protein, calories, snacks and Indian recipes. Your saved target is ${profile.target_calories || 2200} kcal/day. How can I assist you today?`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -66,48 +147,39 @@ export const AiAssistantView: React.FC<AiAssistantViewProps> = ({ profile }) => 
     setLoading(true);
 
     try {
-      const response = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: textToSend,
-          profileContext: {
-            name: profile.full_name,
-            age: profile.age,
-            gender: profile.gender,
-            weight: profile.weight,
-            height: profile.height,
-            goal: profile.fitness_goal,
-            diet: profile.dietary_preference,
-            allergies: profile.allergies,
-            calories: profile.target_calories,
-            protein: profile.target_protein,
-          },
-        }),
-      });
+      // GitHub Pages is static hosting, so the browser-safe local assistant is
+      // always available. If a hosted backend is configured, use it first.
+      const apiUrl = (import.meta.env.VITE_AI_API_URL || '').trim();
+      let reply = '';
 
-      if (!response.ok) {
-        throw new Error('AI service error');
+      if (apiUrl) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: textToSend,
+              prompt: textToSend,
+              userProfile: profile,
+              profileContext: profile,
+            }),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            reply = data.reply || '';
+          }
+        } catch {
+          // Use the local assistant below when the hosted API is unavailable.
+        }
       }
 
-      const data = await response.json();
       const assistantMsg: Message = {
         id: String(Date.now() + 1),
         sender: 'assistant',
-        text: data.reply || 'Here is your nutritional guidance based on your profile.',
+        text: reply || buildOfflineReply(textToSend, profile),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
-
       setMessages((prev) => [...prev, assistantMsg]);
-    } catch (err) {
-      // Graceful fallback response
-      const fallbackMsg: Message = {
-        id: String(Date.now() + 1),
-        sender: 'assistant',
-        text: `Here is a healthy recommendation for your ${profile.fitness_goal.replace('_', ' ')} goal (${profile.dietary_preference}):\n\n• Focus on lean protein (Paneer, Tofu, Soya chunks, Lentils, or Eggs/Chicken)\n• Incorporate complex carbs like rolled oats, brown rice, or whole wheat rotis\n• Drink at least 2.5L water and avoid refined sugars.\n\n(Note: Generated via smart offline nutrition fallback)`,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, fallbackMsg]);
     } finally {
       setLoading(false);
     }
