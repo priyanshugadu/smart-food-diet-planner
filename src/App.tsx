@@ -15,8 +15,6 @@ import {
 import { applyTheme, getSavedTheme } from './utils/theme';
 import { ThemeSelectorModal } from './components/ThemeSelectorModal';
 import { DownloadReportModal } from './components/DownloadReportModal';
-import { AndroidInstallModal } from './components/AndroidInstallModal';
-import { usePWAInstall } from './utils/usePWAInstall';
 import { Sidebar, NavTab } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { AuthView } from './views/AuthView';
@@ -47,11 +45,8 @@ export default function App() {
   const [theme, setTheme] = useState<AppTheme>(getSavedTheme);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-  const [isAndroidModalOpen, setIsAndroidModalOpen] = useState(false);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
 
-  // PWA & Android Install Hook
-  const { canInstall, isInstalled, promptInstall } = usePWAInstall();
 
   // Apply theme on load and changes
   useEffect(() => {
@@ -402,7 +397,6 @@ export default function App() {
         currentTheme={theme}
         onOpenThemeModal={() => setIsThemeModalOpen(true)}
         onOpenDownloadReport={() => setIsDownloadModalOpen(true)}
-        onOpenAndroidInstall={() => setIsAndroidModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -416,7 +410,6 @@ export default function App() {
           currentTheme={theme}
           onOpenThemeModal={() => setIsThemeModalOpen(true)}
           onOpenDownloadReport={() => setIsDownloadModalOpen(true)}
-          onOpenAndroidInstall={() => setIsAndroidModalOpen(true)}
           userRole={user.role}
           selectedDate={selectedDate}
           onOpenCalendarModal={() => setIsCalendarModalOpen(true)}
@@ -435,7 +428,6 @@ export default function App() {
               onQuickAddWater={handleAddWater}
               onOpenDownloadReport={() => setIsDownloadModalOpen(true)}
               onOpenThemeModal={() => setIsThemeModalOpen(true)}
-              onOpenAndroidInstall={() => setIsAndroidModalOpen(true)}
               selectedDate={selectedDate}
               onChangeDate={setSelectedDate}
               onOpenCalendarModal={() => setIsCalendarModalOpen(true)}
@@ -581,18 +573,8 @@ export default function App() {
           waterLogs={waterLogs}
           weightLogs={weightLogs}
           selectedDate={selectedDate}
-          onOpenAndroidInstall={() => setIsAndroidModalOpen(true)}
         />
       )}
-
-      {/* Android Download & Installation Modal */}
-      <AndroidInstallModal
-        isOpen={isAndroidModalOpen}
-        onClose={() => setIsAndroidModalOpen(false)}
-        canInstall={canInstall}
-        isInstalled={isInstalled}
-        onPromptInstall={promptInstall}
-      />
 
       {/* Interactive Diet & Meal Calendar Modal */}
       <CalendarModal
