@@ -14,7 +14,6 @@ import {
   Droplets,
   Scale,
   ShieldCheck,
-  Smartphone,
 } from 'lucide-react';
 import { UserProfile, MealPlanItem, FoodLog, WaterLog, WeightLog } from '../types';
 import { calculateNutritionTargets } from '../utils/nutritionCalculations';
@@ -35,7 +34,6 @@ interface DownloadReportModalProps {
   waterLogs: WaterLog[];
   weightLogs: WeightLog[];
   selectedDate?: string;
-  onOpenAndroidInstall?: () => void;
 }
 
 export const DownloadReportModal: React.FC<DownloadReportModalProps> = ({
@@ -47,7 +45,6 @@ export const DownloadReportModal: React.FC<DownloadReportModalProps> = ({
   waterLogs,
   weightLogs,
   selectedDate,
-  onOpenAndroidInstall,
 }) => {
   const [downloadSuccessMsg, setDownloadSuccessMsg] = useState<string | null>(null);
 
