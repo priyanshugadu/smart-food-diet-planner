@@ -15,7 +15,6 @@ import {
   LogOut,
   Sparkles,
   Palette,
-  Smartphone,
   Download,
 } from 'lucide-react';
 import { AuthUser, AppTheme } from '../types';
@@ -48,7 +47,6 @@ interface SidebarProps {
   currentTheme?: AppTheme;
   onOpenThemeModal?: () => void;
   onOpenDownloadReport?: () => void;
-  onOpenAndroidInstall?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -62,7 +60,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentTheme = 'emerald',
   onOpenThemeModal,
   onOpenDownloadReport,
-  onOpenAndroidInstall,
 }) => {
   const navItems: { id: NavTab; label: string; icon: React.ComponentType<{ className?: string }>; badge?: string }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -179,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* Quick App Actions: Download Report & Android App */}
+        {/* Quick App Actions: Download Report */}
         <div className="px-3 pt-2 pb-1 space-y-1.5 border-t border-slate-100 dark:border-slate-800">
           {onOpenAndroidInstall && (
             <button
