@@ -178,25 +178,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Quick App Actions: Download Report */}
         <div className="px-3 pt-2 pb-1 space-y-1.5 border-t border-slate-100 dark:border-slate-800">
-          {onOpenAndroidInstall && (
-            <button
-              id="sidebar-android-btn"
-              onClick={() => {
-                onCloseMobile();
-                onOpenAndroidInstall();
-              }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200/80 dark:border-emerald-800/80 transition-colors shadow-2xs cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Android App</span>
-              </div>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold">
-                Install
-              </span>
-            </button>
-          )}
-
           {onOpenDownloadReport && (
             <button
               id="sidebar-download-btn"
